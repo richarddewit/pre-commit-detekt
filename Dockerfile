@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 # Create a custom Java runtime
 RUN "$JAVA_HOME/bin/jlink" \
-    --add-modules java.base \
+    --add-modules java.base,java.logging,java.desktop,jdk.unsupported,jdk.zipfs \
     --strip-debug \
     --no-man-pages \
     --no-header-files \
