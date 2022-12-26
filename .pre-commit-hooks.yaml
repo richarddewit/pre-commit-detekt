@@ -1,6 +1,6 @@
 - id: detekt
   name: Detekt
-  description: 'Runs `detekt` on modified .kt files.'
+  description: 'Runs `detekt` on modified .kt/.kts files.'
   language: docker
-  entry: 'java -jar "/opt/detekt/detekt-cli-all.jar" --input '
+  entry: '/opt/detekt/entrypoint.sh'
   files: \.(kt|kts)$
