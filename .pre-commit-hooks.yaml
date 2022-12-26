@@ -4,4 +4,3 @@
   language: docker
   entry: 'java -jar "/opt/detekt/detekt-cli-all.jar" --input '
   files: \.(kt|kts)$
-  require_serial: true
