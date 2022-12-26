@@ -3,5 +3,5 @@
   description: 'Runs `detekt` on modified .kt files.'
   language: docker
   entry: 'java -jar "/opt/detekt/detekt-cli-all.jar" --input '
-  files: \.kt$
+  files: \.(kt|kts)$
   require_serial: true
