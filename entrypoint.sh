@@ -37,7 +37,7 @@ if [[ $base_path_included -eq 0 ]]; then
 fi
 
 # run detekt
-pushd /src || exit >/dev/null
+pushd /src >/dev/null || exit 1
 if [ "$filenames" == "" ] || [[ $input_included -eq 1 ]]; then
     OUTPUT=$(java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}" 2>&1)
 else
@@ -53,4 +53,4 @@ if [ $EXIT_CODE -ne 0 ]; then
     echo "***********************************************"
     exit $EXIT_CODE
 fi
-popd || exit >/dev/null
+popd >/dev/null || exit 1
