@@ -37,5 +37,7 @@ ENV DEFAULT_JVM_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED"
 COPY --from=build-env /javaruntime $JAVA_HOME
 COPY --from=build-env /opt/detekt /opt/detekt
 WORKDIR /opt/detekt
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
-ENTRYPOINT ["java", "-jar", "/opt/detekt/detekt-cli-all.jar"]
+ENTRYPOINT ["/opt/detekt/entrypoint.sh"]
