@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -u
 
 # parse arguments
 opts=()
@@ -37,10 +37,20 @@ if [[ $base_path_included -eq 0 ]]; then
 fi
 
 # run detekt
-pushd /src >/dev/null
+pushd /src || exit >/dev/null
 if [ "$filenames" == "" ] || [[ $input_included -eq 1 ]]; then
-    java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}"
+    OUTPUT=$(java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}" 2>&1)
 else
-    java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}" --input "$filenames"
+    OUTPUT=$(java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}" --input "$filenames" 2>&1)
 fi
-popd >/dev/null
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+    echo "$OUTPUT"
+    echo "***********************************************"
+    echo "                 Detekt failed                 "
+    echo " Please fix the above issues before committing "
+    echo "***********************************************"
+    exit $EXIT_CODE
+fi
+popd || exit >/dev/null
