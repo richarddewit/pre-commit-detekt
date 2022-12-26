@@ -37,7 +37,7 @@ if [[ $base_path_included -eq 0 ]]; then
 fi
 
 # run detekt
-pushd /src
+pushd /src >/dev/null
 if [ "$filenames" == "" ] || [[ $input_included -eq 1 ]]; then
     java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}"
 else
