@@ -43,4 +43,4 @@ if [ "$filenames" == "" ] || [[ $input_included -eq 1 ]]; then
 else
     java -jar "/opt/detekt/detekt-cli-all.jar" "${opts[@]}" --input "$filenames"
 fi
-popd
+popd >/dev/null
