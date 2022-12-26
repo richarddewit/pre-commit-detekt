@@ -1,0 +1,7 @@
+- id: detekt
+  name: Detekt
+  description: 'Runs `detekt` on modified .kt files.'
+  language: docker
+  entry: 'java -jar "/opt/detekt/detekt-cli-all.jar"'
+  files: \.kt$
+  require_serial: true
