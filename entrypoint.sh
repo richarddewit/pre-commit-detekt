@@ -124,12 +124,13 @@ if [ ! -f "$detekt_jar_path" ]; then
 fi
 
 # Run detekt
+jvm_opts="--add-opens java.base/java.lang=ALL-UNNAMED"
 if [ "$filenames" = "" ] || [ $input_included -eq 1 ]; then
     # shellcheck disable=SC2086
-    OUTPUT=$("$javacmd" -jar "$detekt_jar_path" $opts 2>&1)
+    OUTPUT=$("$javacmd" $jvm_opts -jar "$detekt_jar_path" $opts 2>&1)
 else
     # shellcheck disable=SC2086
-    OUTPUT=$("$javacmd" -jar "$detekt_jar_path" $opts --input "$filenames" 2>&1)
+    OUTPUT=$("$javacmd" $jvm_opts -jar "$detekt_jar_path" $opts --input "$filenames" 2>&1)
 fi
 
 EXIT_CODE=$?

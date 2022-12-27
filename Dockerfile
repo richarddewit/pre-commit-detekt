@@ -31,8 +31,6 @@ ARG DETEKT_VERSION
 # Install the custom Java runtime
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
-# for ktlint
-ENV DEFAULT_JVM_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED"
 COPY --from=build-env /javaruntime $JAVA_HOME
 COPY --from=build-env /opt/detekt /opt/detekt
 WORKDIR /opt/detekt
