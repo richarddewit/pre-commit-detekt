@@ -111,7 +111,12 @@ if [ ! -f "$detekt_jar" ]; then
     )
     cd "$detekt_dir" >/dev/null || exit 1
     echo "Downloading detekt..."
-    curl -sSLO "https://github.com/detekt/detekt/releases/download/v$detekt_version/detekt-cli-$detekt_version-all.jar"
+    uname_out="$(uname -s)"
+    case "${uname_out}" in
+    Darwin*) curl_opts="-sSO" ;;
+    *) curl_opts="-sSLO" ;;
+    esac
+    curl "$curl_opts" "https://github.com/detekt/detekt/releases/download/v$detekt_version/detekt-cli-$detekt_version-all.jar"
     cd "$base_path" >/dev/null || exit 1
 fi
 
