@@ -40,7 +40,7 @@ elif [ "$1" = "host" ]; then
     )
     cd "$current_dir" >/dev/null || exit 1
     detekt_jar_path="$repo_dir/$detekt_jar_name"
-    base_path="."
+    base_path="$current_dir"
     shift 2
 fi
 
