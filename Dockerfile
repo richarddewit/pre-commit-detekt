@@ -22,8 +22,7 @@ RUN mkdir /opt/detekt
 WORKDIR /opt/detekt
 
 # Download detekt
-RUN curl -sSLO "https://github.com/detekt/detekt/releases/download/v$DETEKT_VERSION/detekt-cli-$DETEKT_VERSION-all.jar" && \
-    mv "detekt-cli-$DETEKT_VERSION-all.jar" detekt-cli-all.jar
+RUN curl -sSLO "https://github.com/detekt/detekt/releases/download/v$DETEKT_VERSION/detekt-cli-$DETEKT_VERSION-all.jar"
 
 # Define the base image
 FROM debian:buster-slim
@@ -38,6 +37,7 @@ COPY --from=build-env /javaruntime $JAVA_HOME
 COPY --from=build-env /opt/detekt /opt/detekt
 WORKDIR /opt/detekt
 COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
+RUN chmod +x entrypoint.sh && \
+    echo "$DETEKT_VERSION" > /opt/detekt/version
 
-ENTRYPOINT ["/opt/detekt/entrypoint.sh"]
+ENTRYPOINT ["/opt/detekt/entrypoint.sh", "container"]

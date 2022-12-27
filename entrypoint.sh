@@ -16,6 +16,42 @@ ends_with() {
     esac
 }
 
+if [ "$1" = "container" ]; then
+    detekt_version="$(cat /opt/detekt/version)"
+    detekt_jar="/opt/detekt/detekt-cli-$detekt_version-all.jar"
+    base_path="/src"
+    shift 1
+elif [ "$1" = "host" ]; then
+    detekt_version="$2"
+    detekt_jar="./detekt-cli-$detekt_version-all.jar"
+    base_path="."
+    shift 2
+else
+    echo "Usage: $0 [container|host version] [options] [filenames]"
+    exit 2
+fi
+
+if [ -n "$JAVA_HOME" ]; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
+        # IBM's JDK on AIX uses strange locations for the executables
+        javacmd=$JAVA_HOME/jre/sh/java
+    else
+        javacmd=$JAVA_HOME/bin/java
+    fi
+    if [ ! -x "$javacmd" ]; then
+        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
+
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation."
+    fi
+else
+    javacmd=java
+    which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation."
+fi
+
 # parse arguments
 opts=""
 filenames=""
@@ -53,18 +89,25 @@ if [ $base_path_included -eq 0 ]; then
     if [ "$opts" != "" ]; then
         opts="$opts "
     fi
-    opts="${opts}--base-path /src"
+    opts="${opts}--base-path $base_path"
+fi
+
+current_dir=$(pwd)
+cd "$base_path" >/dev/null || exit 1
+
+# Download detekt if it doesn't exist
+if [ ! -f "$detekt_jar" ]; then
+    echo "Downloading detekt..."
+    curl -sSLO "https://github.com/detekt/detekt/releases/download/v$detekt_version/detekt-cli-$detekt_version-all.jar"
 fi
 
 # run detekt
-current_dir=$(pwd)
-cd /src >/dev/null || exit 1
 if [ "$filenames" = "" ] || [ $input_included -eq 1 ]; then
     # shellcheck disable=SC2086
-    OUTPUT=$(java -jar "/opt/detekt/detekt-cli-all.jar" $opts 2>&1)
+    OUTPUT=$("$javacmd" -jar "$detekt_jar" $opts 2>&1)
 else
     # shellcheck disable=SC2086
-    OUTPUT=$(java -jar "/opt/detekt/detekt-cli-all.jar" $opts --input "$filenames" 2>&1)
+    OUTPUT=$("$javacmd" -jar "$detekt_jar" $opts --input "$filenames" 2>&1)
 fi
 
 EXIT_CODE=$?
