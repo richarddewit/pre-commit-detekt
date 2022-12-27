@@ -6,7 +6,7 @@
   files: \.(kt|kts)$
 - id: detekt-docker
   name: Detekt
-  description: 'Runs `detekt` on modified .kt/.kts files in a Docker container.'
+  description: 'Runs `detekt` in a Docker container on modified .kt/.kts files.'
   language: docker
   entry: '/opt/detekt/entrypoint.sh container'
   files: \.(kt|kts)$
