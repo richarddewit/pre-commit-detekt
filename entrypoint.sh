@@ -120,15 +120,11 @@ if [ ! -f "$detekt_jar_path" ]; then
 
     echo "Downloading detekt..."
     remote_detekt_url="https://github.com/detekt/detekt/releases/download/v$detekt_version/$detekt_jar_name"
-    uname_out="$(uname -s)"
-    case "${uname_out}" in
-    Darwin*) curl -sSO "$remote_detekt_url" "$detekt_jar_path" ;;
-    *) curl -sSLO "$remote_detekt_url" ;;
-    esac
+    curl -sSLO "$remote_detekt_url"
     cd "$base_path" >/dev/null || exit 1
 fi
 
-# run detekt
+# Run detekt
 if [ "$filenames" = "" ] || [ $input_included -eq 1 ]; then
     # shellcheck disable=SC2086
     OUTPUT=$("$javacmd" -jar "$detekt_jar_path" $opts 2>&1)
