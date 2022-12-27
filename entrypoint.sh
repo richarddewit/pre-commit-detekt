@@ -32,6 +32,8 @@ else
     echo "Usage: $0 [container|host] [options] [filenames]"
     exit 2
 fi
+detekt_version="$(echo "$detekt_version" | sed -e 's/^v//g')"
+
 detekt_jar_name="detekt-cli-$detekt_version-all.jar"
 if [ "$1" = "container" ]; then
     detekt_jar_path="/opt/detekt/$detekt_jar_name"
