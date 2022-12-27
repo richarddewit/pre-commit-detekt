@@ -23,7 +23,13 @@ if [ "$1" = "container" ]; then
     shift 1
 elif [ "$1" = "host" ]; then
     detekt_version="$2"
-    detekt_jar="./detekt-cli-$detekt_version-all.jar"
+    current_dir=$(pwd)
+    repo_dir=$(
+        cd "$(dirname "$0")" || exit 1
+        pwd
+    )
+    cd "$current_dir" >/dev/null || exit 1
+    detekt_jar="$repo_dir/detekt-cli-$detekt_version-all.jar"
     base_path="."
     shift 2
 else
@@ -99,8 +105,14 @@ cd "$base_path" >/dev/null || exit 1
 
 # Download detekt if it doesn't exist
 if [ ! -f "$detekt_jar" ]; then
+    detekt_dir=$(
+        cd "$(dirname "$detekt_jar")" || exit 1
+        pwd
+    )
+    cd "$detekt_dir" >/dev/null || exit 1
     echo "Downloading detekt..."
     curl -sSLO "https://github.com/detekt/detekt/releases/download/v$detekt_version/detekt-cli-$detekt_version-all.jar"
+    cd "$base_path" >/dev/null || exit 1
 fi
 
 # run detekt
