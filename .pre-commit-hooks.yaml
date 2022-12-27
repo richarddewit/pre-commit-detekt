@@ -2,7 +2,7 @@
   name: Detekt
   description: 'Runs `detekt` on modified .kt/.kts files.'
   language: script
-  entry: 'entrypoint.sh host 1.22.0'
+  entry: 'entrypoint.sh host'
   files: \.(kt|kts)$
 - id: detekt-docker
   name: Detekt

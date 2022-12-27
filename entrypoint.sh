@@ -16,33 +16,31 @@ ends_with() {
     esac
 }
 
+current_dir=$(pwd)
+repo_dir=$(
+    cd "$(dirname "$0")" || exit 1
+    pwd
+)
+cd "$current_dir" >/dev/null || exit 1
+
 # Parse arguments for entrypoint.sh
 if [ "$1" = "container" ]; then
     detekt_version="$(cat /opt/detekt/version)"
 elif [ "$1" = "host" ]; then
-    detekt_version="$2"
+    detekt_version="$(cat "$repo_dir/version")"
 else
-    echo "Usage: $0 [container|host version] [options] [filenames]"
+    echo "Usage: $0 [container|host] [options] [filenames]"
     exit 2
 fi
 detekt_jar_name="detekt-cli-$detekt_version-all.jar"
 if [ "$1" = "container" ]; then
-    detekt_version="$(cat /opt/detekt/version)"
     detekt_jar_path="/opt/detekt/$detekt_jar_name"
     base_path="/src"
-    shift 1
 elif [ "$1" = "host" ]; then
-    detekt_version="$2"
-    current_dir=$(pwd)
-    repo_dir=$(
-        cd "$(dirname "$0")" || exit 1
-        pwd
-    )
-    cd "$current_dir" >/dev/null || exit 1
     detekt_jar_path="$repo_dir/$detekt_jar_name"
     base_path="$current_dir"
-    shift 2
 fi
+shift 1
 
 set +u
 if [ -n "$JAVA_HOME" ]; then
@@ -107,7 +105,6 @@ if [ $base_path_included -eq 0 ]; then
     opts="${opts}--base-path $base_path"
 fi
 
-current_dir=$(pwd)
 cd "$base_path" >/dev/null || exit 1
 
 # Download detekt if it doesn't exist

@@ -37,7 +37,7 @@ COPY --from=build-env /javaruntime $JAVA_HOME
 COPY --from=build-env /opt/detekt /opt/detekt
 WORKDIR /opt/detekt
 COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh && \
-    echo "$DETEKT_VERSION" > /opt/detekt/version
+COPY version .
+RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["/opt/detekt/entrypoint.sh", "container"]
