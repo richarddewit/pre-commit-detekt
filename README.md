@@ -1,7 +1,7 @@
 # pre-commit-detekt
 
-*pre-commit-detekt* is a [pre-commit](https://pre-commit.com/) hook for [detekt](https://github.com/detekt/detekt).
-**pre-commit-detekt does not require pre-installation of detekt-cli.**
+_pre-commit-detekt_ is a [pre-commit](https://pre-commit.com/) hook for [detekt](https://github.com/detekt/detekt).
+**_pre-commit-detekt_ does not require pre-installation of detekt-cli.**
 
 ## Quick start
 
@@ -14,7 +14,7 @@ repos:
   - repo: https://github.com/quwac/pre-commit-detekt
     rev: v1.22.0  # Set detekt version >= v1.22.0. See https://github.com/detekt/detekt/tags
     hooks:
-      - id: detekt
+      - id: detekt-docker
 ```
 
 ## Configuration
@@ -28,7 +28,7 @@ repos:
   - repo: https://github.com/quwac/pre-commit-detekt
     rev: v1.22.0
     hooks:
-      - id: detekt
+      - id: detekt-docker
         args: [
           --all-rules,
           --auto-correct,
@@ -41,8 +41,9 @@ repos:
         ]
 ```
 
-You can also run pre-commit-detekt in a Docker container environment.
-Replace the `id` from `detekt` with `detekt-docker`.
+You can also run pre-commit-detekt in your host environment.
+Replace the `id` from `detekt-docker` with `detekt`.
+`detekt` requires Java installation.
 
 ```yaml
 # .pre-commit-config.yaml
@@ -51,7 +52,7 @@ repos:
   - repo: https://github.com/quwac/pre-commit-detekt
     rev: v1.22.0
     hooks:
-      - id: detekt-docker  # 👈 HERE!
+      - id: detekt  # 👈 HERE!
         args: [
           --all-rules,
           --auto-correct,
