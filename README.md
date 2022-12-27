@@ -1,8 +1,9 @@
 # pre-commit-detekt
 
-Runs [detekt](https://github.com/detekt/detekt) on modified .kt/.kts files
+*pre-commit-detekt* is a [pre-commit](https://pre-commit.com/) hook for [detekt](https://github.com/detekt/detekt).
+**pre-commit-detekt does not require pre-installation of detekt-cli.**
 
-# Quick start
+## Quick start
 
 Append the following to your `.pre-commit-config.yaml`:
 
@@ -11,12 +12,12 @@ Append the following to your `.pre-commit-config.yaml`:
 repos:
   # ....
   - repo: https://github.com/quwac/pre-commit-detekt
-    rev: v1.22.0  # detekt version
+    rev: v1.22.0  # Set detekt version >= v1.22.0. See https://github.com/detekt/detekt/tags
     hooks:
       - id: detekt
 ```
 
-# Configuration
+## Configuration
 
 pre-commit-detekt supports all the options of detekt. You can pass them as arguments to the hook.
 
