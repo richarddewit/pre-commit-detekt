@@ -16,6 +16,15 @@ ends_with() {
     esac
 }
 
+# Parse arguments for entrypoint.sh
+if [ "$1" = "container" ]; then
+    detekt_version="$(cat /opt/detekt/version)"
+elif [ "$1" = "host" ]; then
+    detekt_version="$2"
+else
+    echo "Usage: $0 [container|host version] [options] [filenames]"
+    exit 2
+fi
 detekt_jar_name="detekt-cli-$detekt_version-all.jar"
 if [ "$1" = "container" ]; then
     detekt_version="$(cat /opt/detekt/version)"
@@ -33,9 +42,6 @@ elif [ "$1" = "host" ]; then
     detekt_jar_path="$repo_dir/$detekt_jar_name"
     base_path="."
     shift 2
-else
-    echo "Usage: $0 [container|host version] [options] [filenames]"
-    exit 2
 fi
 
 set +u
@@ -61,7 +67,7 @@ location of your Java installation."
 fi
 set -u
 
-# parse arguments
+# Parse arguments for detekt
 opts=""
 filenames=""
 filenames_started=0
