@@ -31,6 +31,7 @@ else
     exit 2
 fi
 
+set +u
 if [ -n "$JAVA_HOME" ]; then
     if [ -x "$JAVA_HOME/jre/sh/java" ]; then
         # IBM's JDK on AIX uses strange locations for the executables
@@ -51,6 +52,7 @@ else
 Please set the JAVA_HOME variable in your environment to match the
 location of your Java installation."
 fi
+set -u
 
 # parse arguments
 opts=""
