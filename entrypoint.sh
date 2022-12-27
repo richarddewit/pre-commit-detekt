@@ -16,9 +16,10 @@ ends_with() {
     esac
 }
 
+detekt_jar_name="detekt-cli-$detekt_version-all.jar"
 if [ "$1" = "container" ]; then
     detekt_version="$(cat /opt/detekt/version)"
-    detekt_jar="/opt/detekt/detekt-cli-$detekt_version-all.jar"
+    detekt_jar_path="/opt/detekt/$detekt_jar_name"
     base_path="/src"
     shift 1
 elif [ "$1" = "host" ]; then
@@ -29,7 +30,7 @@ elif [ "$1" = "host" ]; then
         pwd
     )
     cd "$current_dir" >/dev/null || exit 1
-    detekt_jar="$repo_dir/detekt-cli-$detekt_version-all.jar"
+    detekt_jar_path="$repo_dir/$detekt_jar_name"
     base_path="."
     shift 2
 else
@@ -104,29 +105,30 @@ current_dir=$(pwd)
 cd "$base_path" >/dev/null || exit 1
 
 # Download detekt if it doesn't exist
-if [ ! -f "$detekt_jar" ]; then
+if [ ! -f "$detekt_jar_path" ]; then
     detekt_dir=$(
-        cd "$(dirname "$detekt_jar")" || exit 1
+        cd "$(dirname "$detekt_jar_path")" || exit 1
         pwd
     )
     cd "$detekt_dir" >/dev/null || exit 1
+
     echo "Downloading detekt..."
+    remote_detekt_url="https://github.com/detekt/detekt/releases/download/v$detekt_version/$detekt_jar_name"
     uname_out="$(uname -s)"
     case "${uname_out}" in
-    Darwin*) curl_opts="-sSO" ;;
-    *) curl_opts="-sSLO" ;;
+    Darwin*) curl -sSO "$remote_detekt_url" "$detekt_jar_path" ;;
+    *) curl -sSLO "$remote_detekt_url" ;;
     esac
-    curl "$curl_opts" "https://github.com/detekt/detekt/releases/download/v$detekt_version/detekt-cli-$detekt_version-all.jar"
     cd "$base_path" >/dev/null || exit 1
 fi
 
 # run detekt
 if [ "$filenames" = "" ] || [ $input_included -eq 1 ]; then
     # shellcheck disable=SC2086
-    OUTPUT=$("$javacmd" -jar "$detekt_jar" $opts 2>&1)
+    OUTPUT=$("$javacmd" -jar "$detekt_jar_path" $opts 2>&1)
 else
     # shellcheck disable=SC2086
-    OUTPUT=$("$javacmd" -jar "$detekt_jar" $opts --input "$filenames" 2>&1)
+    OUTPUT=$("$javacmd" -jar "$detekt_jar_path" $opts --input "$filenames" 2>&1)
 fi
 
 EXIT_CODE=$?
