@@ -135,7 +135,7 @@ fi
 
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
-    echo "$OUTPUT"
+    echo "$OUTPUT" | sed -e 's|^/src|.|g'
     echo "***********************************************"
     echo "                 Detekt failed                 "
     echo " Please fix the above issues before committing "
