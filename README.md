@@ -12,7 +12,7 @@ Append the following to your `.pre-commit-config.yaml`:
 repos:
   # ....
   - repo: https://github.com/quwac/pre-commit-detekt
-    rev: v1.22.0  # Set detekt version >= v1.22.0. See https://github.com/detekt/detekt/tags
+    rev: v1.23.4  # Set detekt version >= v1.23.4. See https://github.com/detekt/detekt/tags
     hooks:
       - id: detekt-docker
 ```
@@ -26,7 +26,7 @@ pre-commit-detekt supports all the options of detekt. You can pass them as argum
 repos:
   # ....
   - repo: https://github.com/quwac/pre-commit-detekt
-    rev: v1.22.0
+    rev: v1.23.4
     hooks:
       - id: detekt-docker
         args: [
@@ -35,7 +35,7 @@ repos:
           --config,
           config/detekt.yml,  # Make detekt.yml in `./config` directory.
           --plugins,
-          detekt-plugins/detekt-formatting-1.22.0.jar,  # Download detekt-formatting-1.22.0.jar in `./detekt-plugins` directory.
+          detekt-plugins/detekt-formatting-1.23.4.jar,  # Download detekt-formatting-1.23.4.jar in `./detekt-plugins` directory.
           --report,
           html:detekt.html
         ]
@@ -50,7 +50,7 @@ Replace the `id` from `detekt-docker` with `detekt`.
 repos:
   # ....
   - repo: https://github.com/quwac/pre-commit-detekt
-    rev: v1.22.0
+    rev: v1.23.4
     hooks:
       - id: detekt  # 👈 HERE!
         args: [
@@ -59,7 +59,7 @@ repos:
           --config,
           config/detekt.yml,
           --plugins,
-          detekt-plugins/detekt-formatting-1.22.0.jar,
+          detekt-plugins/detekt-formatting-1.23.4.jar,
           --report,
           html:detekt.html
         ]
